@@ -1,13 +1,17 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 	<head>
 		<title>MarkdownEditor</title>
-		<link type="text/css" rel="stylesheet" href="css/editor.css" />
+		<link type="text/css" rel="stylesheet" href="static/css/bootstrap.css" />
 	</head>
 	<body>
-		<h1 style="font-size:250%;">MarkPad</h1>
-		<div id="toolbar"></div>
-		<textarea rows="20" cols="80" id="editor" style="width:742px;margin-top:15px;"># This is a test
+  		<div class="container-fluid">
+    		<h1 style="font-size:250%;">MarkPad</h1>
+
+  		<div class="row-fluid">
+  		  <div class="span6">
+      		<div id="toolbar"></div>
+      		<textarea rows="20" cols="80" id="editor" style="width: 100%"># This is a test
 
 What do you think Hunter?
 
@@ -23,14 +27,22 @@ It isn't side by and side and everything, but it works reasonably well.
 
 *****
 
-Yay!</textarea>
-		<h2 style="font-size:80%;color:gray;font-weight: bold;">Preview:</h2>
-		<div id="preview"></div>
+Yay!
+          </textarea>
+        </div>
+        <div class="span6">
+  		    <h2>Preview:</h2>
+      		<div id="preview"></div>
+      	</div>
+      </div>
+    </div>
 
-		<script type="text/javascript" src="js/showdown.js"></script>
+		<script type="text/javascript" src="static/js/showdown.js"></script>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-		<script type="text/javascript" src="js/jquery.caret.1.02.js"></script>
-		<script type="text/javascript" src="js/markdowneditor.js"></script>
+		<script type="text/javascript" src="static/js/jquery.caret.1.02.js"></script>
+		<script type="text/javascript" src="static/js/bootstrap-tooltip.js"></script>
+    
+		<script type="text/javascript" src="static/js/markdowneditor.js"></script>
 		<script type="text/javascript">
 			$(function () {
 				$('#editor').markdownEditor({
@@ -40,5 +52,6 @@ Yay!</textarea>
 				});
 			});
 		</script>
+		
 	</body>
 </html>
