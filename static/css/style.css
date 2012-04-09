@@ -1,0 +1,16 @@
+.btn-toolbar {
+  overflow: hidden;
+  height: 28px;
+}
+
+#editor {
+  width: 95%;
+}
+
+#branding {
+  margin: .5em 0;
+}
+
+#preview {
+  padding-top: 40px;
+}

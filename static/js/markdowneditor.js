@@ -11,6 +11,10 @@
 	}
 	$.markdownEditor = {
 		buttons: {
+			'open' : {'name': 'Open', 'icon':'folder-open', 'btn_class':'btn-primary', 'icon_class':'icon-white', callback: function(){}},
+			'savemd' : {'name': 'Save Source', 'icon':'share', 'btn_class':'btn-primary', 'icon_class':'icon-white', callback: function(){}},
+			'savehtml' : {'name': 'Save HTML', 'icon':'share-alt', 'btn_class':'btn-primary', 'icon_class':'icon-white', callback: function(){}},
+
 			'h1' : {'name': 'H1', 'icon':'', callback: h(1)},
 			'h2' : {'name': 'H2', 'icon':'', callback: h(2)},
 			'h3' : {'name': 'H3', 'icon':'', callback: h(3)},
@@ -27,7 +31,7 @@
 			'outdent': {'name': 'Outdent', 'icon':'indent-right', callback: function (caret) {caret.replaceInSelection(/[ ]{4}(?![ ]{4})/g, "");}}
 		},
 		toolbars: {
-			'default': [['h1','h2','h3','h4','h5','h6'], ['bold','italic'], ['link'], ['quote', 'code'], ['hr']]
+			'default': [['open', 'savemd', 'savehtml'],['h1','h2','h3'], ['bold','italic'], ['link'], ['quote', 'code'], ['hr']]
 		}
 	};
 	$.fn.markdownEditor = function (opts) {
@@ -89,10 +93,11 @@
 	}
 	$.markdownEditor.ui.prototype.makeButton = function(key, obj) {
         var button = $("<button></button>").addClass('me-'+key).addClass('btn').attr('alt', obj.name).click(this.clickHandler(obj.callback));
+        button.addClass(obj.btn_class);
         if (obj.icon == '') {
 		    button.html(obj.name)
 		} else {
-		    var icon = $("<i></i>").addClass('icon-'+obj.icon);
+		    var icon = $("<i></i>").addClass('icon-'+obj.icon).addClass(obj.icon_class);
 		    button.append(icon);
             button.attr('rel', 'tooltip');
             button.attr('title', obj.name);
@@ -104,5 +109,11 @@
 	$.markdownEditor.ui.prototype.clickHandler = function(callback) {
 		var that = this;
 		return function (e) { callback.apply(null, [that.$textarea.caret(), that.$textarea]); that.$textarea.preview(); };
+	}
+	$.markdownEditor.layout = function (){
+	  var source = $('#source');
+	  var preview = $('#preview');
+	  source.hide();
+	  preview.addClass('span12').removeClass('span6');
 	}
 })(jQuery);

@@ -3,15 +3,17 @@
 	<head>
 		<title>MarkdownEditor</title>
 		<link type="text/css" rel="stylesheet" href="static/css/bootstrap.css" />
+		<link type="text/css" rel="stylesheet" href="static/css/bootstrap-responsive.css" />
+		<link type="text/css" rel="stylesheet" href="static/css/style.css" />
 	</head>
 	<body>
   		<div class="container-fluid">
-    		<h1 style="font-size:250%;">MarkPad</h1>
+    		<h1 id="branding">MarkPad <small>A simple editor for complex ideas</small></h1>
 
   		<div class="row-fluid">
-  		  <div class="span6">
+  		  <div id="source" class="span6">
       		<div id="toolbar"></div>
-      		<textarea rows="20" cols="80" id="editor" style="width: 100%"># This is a test
+      		<textarea rows="20" cols="80" id="editor"># This is a test
 
 What do you think Hunter?
 
@@ -30,7 +32,7 @@ It isn't side by and side and everything, but it works reasonably well.
 Yay!
           </textarea>
         </div>
-        <div class="span6">
+        <div id="preview" class="span6">
   		    <h2>Preview:</h2>
       		<div id="preview"></div>
       	</div>
