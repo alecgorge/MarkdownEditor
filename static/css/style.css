@@ -7,10 +7,31 @@
   width: 95%;
 }
 
-#branding {
-  margin: .5em 0;
+#preview {
+    padding-top: 10px;
 }
 
-#preview {
-  padding-top: 40px;
+#branding {
+height: 54px;
 }
+
+body {
+    margin-top: 10px;
+    padding-bottom: 40px;
+}
+
+@media print {
+
+    .btn-toolbar, #editor, #branding {
+        display: none;
+        }
+        
+    a:link, a:visited {
+        color: #520;
+        background: transparent;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+}
+   

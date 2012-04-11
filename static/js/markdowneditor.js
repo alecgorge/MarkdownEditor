@@ -1,4 +1,7 @@
 (function ($) {
+  //Saveback
+	saveback.setKey('asdlkfjs');
+	
 	function h(q) {
 		return function(c) {c.prependToLeadingLine((new Array(q+1)).join('#')+' ');};
 	}
@@ -9,11 +12,20 @@
 	function replace(x,y) {
 		return function(c) {c.replace(x,y)};
 	}
+    function linecount(){
+        return Math.ceil(eval($.map($('#editor').val().split('\n'), function(n, i){return Math.ceil(n.length/75)}).join('+'))/43*10)/10;
+    }
+    function wordcount(){
+        return $('#editor').val().split(/[\s]/).length;
+    }
+    function charcount(){
+        return $('#editor').val().length;
+    }
 	$.markdownEditor = {
 		buttons: {
 			'open' : {'name': 'Open', 'icon':'folder-open', 'btn_class':'btn-primary', 'icon_class':'icon-white', callback: function(){}},
-			'savemd' : {'name': 'Save Source', 'icon':'share', 'btn_class':'btn-primary', 'icon_class':'icon-white', callback: function(){}},
-			'savehtml' : {'name': 'Save HTML', 'icon':'share-alt', 'btn_class':'btn-primary', 'icon_class':'icon-white', callback: function(){}},
+			'savemd' : {'name': 'Save Source', 'icon':'share', 'btn_class':'btn-primary disabled', 'icon_class':'icon-white', callback: function(){}},
+			'savehtml' : {'name': 'Save HTML', 'icon':'share-alt', 'btn_class':'btn-primary disabled', 'icon_class':'icon-white', callback: function(){}},
 
 			'h1' : {'name': 'H1', 'icon':'', callback: h(1)},
 			'h2' : {'name': 'H2', 'icon':'', callback: h(2)},
@@ -46,7 +58,10 @@
 
 			$this.preview = function () {
 				$preview.html(markdown.toHTML($this.val()));
+				$.markdownEditor.saveback.save();
 			}; $this.preview();
+
+      preview = $this.preview;
 
 			$this.on('keydown', function(e) {
 				var code = e.keyCode ? e.keyCode : e.which;
@@ -64,6 +79,7 @@
 			});
 
 			ui.rebuildToolbar(toolbar);
+			$.markdownEditor.saveback.clickHandlers();
 		});
 	}
 
@@ -115,5 +131,31 @@
 	  var preview = $('#preview');
 	  source.hide();
 	  preview.addClass('span12').removeClass('span6');
+	}
+	$.markdownEditor.saveback = {};
+	$.markdownEditor.saveback.target = null;
+	$.markdownEditor.saveback.clickHandlers = function(){
+	  $(".me-open").click(function(){
+  		saveback.getFile(saveback.MIMETYPES.TEXT,function(url, token, data) {
+    	  $.markdownEditor.saveback.target = data;
+          $('title').prepend($.markdownEditor.saveback.target.name + " ");
+          $('#filename').html($.markdownEditor.saveback.target.name);
+  		  $.ajax({ url: url,
+  		          success: function(data){
+  		            $("#editor").html(data);
+  		            preview();
+  		          }});
+  		});
+  	});
+	}
+	$.markdownEditor.saveback.save = function(){
+    
+      $('#stat').html(linecount() + " Pages " + wordcount() + " Words " + charcount() + " Characters");
+	  
+      if (!$.markdownEditor.saveback.target){
+	    return;
+	  } else {
+	    saveback.saveData($("#editor").val(), function(){console.log("saved");});
+	  }
 	}
 })(jQuery);
