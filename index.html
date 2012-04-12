@@ -60,6 +60,7 @@ It can be simple like **Bold** or *Italics*, lists like above, headings, or even
 
 		<script type="text/javascript" src="static/js/showdown.js"></script>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+		<script type="text/javascript" src="static/js/jquery.ba-resize.js"></script>
 		<script type="text/javascript" src="static/js/jquery.caret.1.02.js"></script>
 		<script type="text/javascript" src="static/js/bootstrap.js"></script>
     <script type="text/javascript" src="http://savebackio.herokuapp.com/static/js/saveback.js"></script>
@@ -71,6 +72,18 @@ It can be simple like **Bold** or *Italics*, lists like above, headings, or even
 					toolbar: 'default',
 					preview: $('#preview')
 				});
+				
+				$("#editor").resize( function() {
+                console.log('resize');
+                var newsize = $(window).width() - $("#editor").width() - 80;
+                if (newsize > 150){
+                  $('#preview').width(newsize);
+                  $('#preview').show();
+                } else {
+                  $('#preview').hide();
+                }
+                
+            });
 			});
 		</script>
 		
