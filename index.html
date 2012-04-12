@@ -75,14 +75,19 @@ It can be simple like **Bold** or *Italics*, lists like above, headings, or even
 				
 				$("#editor").resize( function() {
                 console.log('resize');
-                var newsize = $(window).width() - $("#editor").width() - 80;
-                if (newsize > 150){
-                  $('#preview').width(newsize);
+                var windowsize = $(window).width();
+                var newsize = windowsize - $("#editor").width() - 80;
+                if (windowsize < 768){
                   $('#preview').show();
+                  $('#preview').width(windowsize);
                 } else {
-                  $('#preview').hide();
+                  if (newsize > 150){
+                    $('#preview').width(newsize);
+                    $('#preview').show();
+                  } else {
+                    $('#preview').hide();
+                  }
                 }
-                
             });
 			});
 		</script>

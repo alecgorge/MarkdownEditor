@@ -10,7 +10,7 @@
 }
 
 #preview {
-    padding-top: 40px;
+    padding-top: 10px;
 }
 
 #branding {
@@ -33,7 +33,7 @@ body {
   }
   
   #preview {
-      padding-top: 40px;
+      padding-top: 100px;
       float: right;
   }
   
