@@ -23,7 +23,7 @@
     }
 	$.markdownEditor = {
 		buttons: {
-			'open' : {'name': 'Open', 'icon':'folder-open', 'btn_class':'btn-primary', 'icon_class':'icon-white', callback: function(){}},
+			'open' : {'name': '<i class="icon-folder-open icon-white"></i> Open', 'icon':'', 'btn_class':'btn-primary', 'icon_class':'icon-white', callback: function(){}},
 			'savemd' : {'name': 'Save Source', 'icon':'share', 'btn_class':'btn-primary disabled', 'icon_class':'icon-white', callback: function(){}},
 			'savehtml' : {'name': 'Save HTML', 'icon':'share-alt', 'btn_class':'btn-primary disabled', 'icon_class':'icon-white', callback: function(){}},
 
@@ -43,7 +43,7 @@
 			'outdent': {'name': 'Outdent', 'icon':'indent-right', callback: function (caret) {caret.replaceInSelection(/[ ]{4}(?![ ]{4})/g, "");}}
 		},
 		toolbars: {
-			'default': [['open', 'savemd', 'savehtml'],['h1','h2','h3'], ['bold','italic'], ['link'], ['quote', 'code'], ['hr']]
+			'default': [['open'],['h1','h2','h3'], ['bold','italic'], ['link'], ['quote', 'code'], ['hr']]
 		}
 	};
 	$.fn.markdownEditor = function (opts) {
@@ -158,4 +158,9 @@
 	    saveback.saveData($("#editor").val(), function(){console.log("saved");});
 	  }
 	}
+  $.markdownEditor.ui.adjust = function(){
+	  $('#editor').height($(window).height()-160);
+	}
+	jQuery.event.add(window, "load", $.markdownEditor.ui.adjust);
+  jQuery.event.add(window, "resize", $.markdownEditor.ui.adjust);
 })(jQuery);
