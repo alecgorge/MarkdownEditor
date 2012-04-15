@@ -1,28 +1,29 @@
-.me-editor {
-	font-family: Consolas,monospaced;
+#sidebar {
+  float:right;
+  width:230px;
 }
 
-ul.me-toolbar {
-	list-style:none;
-	margin:0;
-	padding:0;
-	width:auto;
-	max-width:100%;
+#sidebar ul {
+  padding:0;
+  margin:0;
 }
 
-ul.me-toolbar > li {
-	display:inline;
-	margin: 0 5px 0 0;
-	padding:0;
+#sidebar li {
+  padding:0;
+  margin:0 0 5px 0;
+  list-style:none;
+  padding:7px;
+  background:#eee;
+  cursor: pointer;
 }
 
-ul.me-toolbar .me-spacer {
-	border-right:1px #999 solid;
-	margin-right:5px;
+#sidebar li h3 {
+  margin-top:0;
 }
 
-.me-clear {
-	clear:both;
+#content {
+  float:left;
+  width:725px;
 }
 
 body{
