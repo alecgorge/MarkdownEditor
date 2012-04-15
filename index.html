@@ -1,43 +1,109 @@
 <!doctype html>
 <html>
 	<head>
-		<title>MarkdownEditor</title>
+		<title>MarkPad</title>
 		<link type="text/css" rel="stylesheet" href="css/editor.css" />
+
+		<link rel="stylesheet" type="text/css" href="js/markitup/skins/simple/style.css" />
+		<link rel="stylesheet" type="text/css" href="js/markitup/sets/markdown/style.css" />
 	</head>
 	<body>
-		<h1 style="font-size:250%;">MarkPad</h1>
-		<div id="toolbar"></div>
-		<textarea rows="20" cols="80" id="editor" style="width:742px;margin-top:15px;"># This is a test
+		<div class="container">
+			<h1 style="font-size:250%;">MarkPad</h1>
 
-What do you think Hunter?
+			<div id="sidebar">
+				<ul>
+					<li data-url="img/sheep1.jpg" draggable="true"><h3>sheep1.jpg</h3>Lorem ipsum dolor sit amet, consectetur adipiscing</li>
+					<li data-url="img/sheep2.jpg" draggable="true"><h3>sheep2.jpg</h3>Lorem ipsum dolor</li>
+					<li data-url="img/sheep3.jpg" draggable="true"><h3>sheep3.jpg</h3>Lorem ipsum dolor sit amet, consectetur adipiscing.</li>
+					<li data-url="img/sheep4.jpg" draggable="true"><h3>sheep4.jpg</h3>Lorem ipsum dolor sit amet, consectetur adipiscing.</li>
+				</ul>
+			</div>
 
-It isn't side by and side and everything, but it works reasonably well.
+			<div id="content">
+				<textarea rows="20" cols="80" id="editor"># This is a test
 
-- try some lists
-	- or how about this
-		- tab characters are handled so you don't lose focus here.
+Try dragging a block into the textarea from the right hand side. It will insert an image.
 
-[Links aren't bad either](//google.com/).
+*******
 
-**The editor is less than 100 lines of code. Things are a bit bigger with jQuery + the 2 dependencies.**
+I hope to get client side github flavored markdown eventually.
 
-*****
+(img/sheep2.jpg)
 
-Yay!</textarea>
-		<h2 style="font-size:80%;color:gray;font-weight: bold;">Preview:</h2>
-		<div id="preview"></div>
+Also, context-sensitivity is in the works for the images. Just a proof of concept for now.</textarea>
+				<h2 style="font-size:80%;color:gray;font-weight: bold;">Preview:</h2>
+				<div id="preview"></div>
+			</div>
+		</div>
 
 		<script type="text/javascript" src="js/showdown.js"></script>
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-		<script type="text/javascript" src="js/jquery.caret.1.02.js"></script>
-		<script type="text/javascript" src="js/markdowneditor.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+
+		<script type="text/javascript" src="js/markitup/jquery.markitup.js"></script>
+		<script type="text/javascript" src="js/markitup/sets/markdown/set.js"></script>
+
 		<script type="text/javascript">
 			$(function () {
-				$('#editor').markdownEditor({
-					toolbarLoc: $('#toolbar'),
-					toolbar: 'default',
-					preview: $('#preview')
+				var $preview = $("#preview")
+				,	preFilters = [] // run before showdown
+				,	postFilters = [] // run after markdown
+				,	$editor = $('#editor')
+				,	preview = function () {
+					clearTimeout(loop);
+
+					loop = setTimeout(function () {
+						var mrk = $editor.val();
+						for(var i = 0; i < preFilters.length; i++)
+							mrk = preFilters[i].call(null, mrk);
+
+						var html = markdown.toHTML(mrk);
+						for(var i = 0; i < postFilters.length; i++)
+							html = postFilters[i](html);
+
+						$preview.html(html);
+					}, 250);
+				}
+				,	loop = null
+				;
+
+				postFilters.push(function (mrk) {
+					return mrk.replace(/\(([a-zA-Z0-9_\/ -]+\.[a-zA-Z]+)\)/mg, function(full, match) {
+						return '<img src="' + match + '" />';
+					});
 				});
+
+				$editor.markItUp({
+					previewParserPath:	'',
+					onShiftEnter:		{keepDefault:false, openWith:'\n\n'},
+					markupSet: [
+						{name:'First Level Heading', key:'1', placeHolder:'Your title here...', closeWith:function(markItUp) { return miu.markdownTitle(markItUp, '=') } },
+						{name:'Second Level Heading', key:'2', placeHolder:'Your title here...', closeWith:function(markItUp) { return miu.markdownTitle(markItUp, '-') } },
+						{name:'Heading 3', key:'3', openWith:'### ', placeHolder:'Your title here...' },
+						{separator:'---------------' },		
+						{name:'Bold', key:'B', openWith:'**', closeWith:'**'},
+						{name:'Italic', key:'I', openWith:'_', closeWith:'_'},
+						{separator:'---------------' },
+						{name:'Bulleted List', openWith:'- ' },
+						{name:'Numeric List', openWith:function(markItUp) {
+							return markItUp.line+'. ';
+						}},
+						{separator:'---------------' },
+						{name:'Link', key:'L', openWith:'[', closeWith:']([![Url:!:http://]!] "[![Title]!]")', placeHolder:'Your text to link here...' },
+						{separator:'---------------'},	
+						{name:'Quotes', openWith:'> '},
+						{name:'Code Block / Code', openWith:'(!(\t|!|`)!)', closeWith:'(!(`)!)'},
+					],
+					afterInsert: function (selection, textarea) {
+						preview();
+					}
+				}).on('keydown drop', preview);
+
+				$('#sidebar li[draggable=true]').on('dragstart', function (e) {
+					e.originalEvent.dataTransfer.setData('Text', '(' + $(this).data('url') + ')');
+				});
+
+				preview();
 			});
 		</script>
 	</body>
