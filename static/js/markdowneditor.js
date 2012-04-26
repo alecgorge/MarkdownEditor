@@ -1,6 +1,6 @@
 (function ($) {
-  //Saveback
-	saveback.setKey('asdlkfjs');
+  //filepicker
+	filepicker.setKey('asdlkfjs');
 	
 	function h(q) {
 		return function(c) {c.prependToLeadingLine((new Array(q+1)).join('#')+' ');};
@@ -24,8 +24,8 @@
 	$.markdownEditor = {
 		buttons: {
 			'open' : {'name': '<i class="icon-folder-open icon-white"></i> Open', 'icon':'', 'btn_class':'btn-primary', 'icon_class':'icon-white', callback: function(){}},
-			'savemd' : {'name': 'Save Source', 'icon':'share', 'btn_class':'btn-primary disabled', 'icon_class':'icon-white', callback: function(){}},
-			'savehtml' : {'name': 'Save HTML', 'icon':'share-alt', 'btn_class':'btn-primary disabled', 'icon_class':'icon-white', callback: function(){}},
+			'savemd' : {'name': 'Save Source', 'icon':'share', 'btn_class':'btn-primary', 'icon_class':'icon-white', callback: function(){}},
+			'savehtml' : {'name': 'Save HTML', 'icon':'share-alt', 'btn_class':'btn-primary', 'icon_class':'icon-white', callback: function(){}},
 
 			'h1' : {'name': 'H1', 'icon':'', callback: h(1)},
 			'h2' : {'name': 'H2', 'icon':'', callback: h(2)},
@@ -43,7 +43,7 @@
 			'outdent': {'name': 'Outdent', 'icon':'indent-right', callback: function (caret) {caret.replaceInSelection(/[ ]{4}(?![ ]{4})/g, "");}}
 		},
 		toolbars: {
-			'default': [['open'],['h1','h2','h3'], ['bold','italic'], ['link'], ['quote', 'code'], ['hr']]
+			'default': [['open', 'savemd', 'savehtml'],['h1','h2','h3'], ['bold','italic'], ['link'], ['quote', 'code'], ['hr']]
 		}
 	};
 	$.fn.markdownEditor = function (opts) {
@@ -58,7 +58,7 @@
 
 			$this.preview = function () {
 				$preview.html(markdown.toHTML($this.val()));
-				$.markdownEditor.saveback.save();
+				$.markdownEditor.filepicker.save();
 			}; $this.preview();
 
       preview = $this.preview;
@@ -79,7 +79,7 @@
 			});
 
 			ui.rebuildToolbar(toolbar);
-			$.markdownEditor.saveback.clickHandlers();
+			$.markdownEditor.filepicker.clickHandlers();
 		});
 	}
 
@@ -132,30 +132,39 @@
 	  source.hide();
 	  preview.addClass('span12').removeClass('span6');
 	}
-	$.markdownEditor.saveback = {};
-	$.markdownEditor.saveback.target = null;
-	$.markdownEditor.saveback.clickHandlers = function(){
+	$.markdownEditor.filepicker = {};
+	$.markdownEditor.filepicker.target = null;
+	$.markdownEditor.filepicker.clickHandlers = function(){
 	  $(".me-open").click(function(){
-  		saveback.getFile(saveback.MIMETYPES.TEXT,function(url, token, data) {
-    	  $.markdownEditor.saveback.target = data;
-          $('title').prepend($.markdownEditor.saveback.target.name + " ");
-          $('#filename').html($.markdownEditor.saveback.target.name);
+  		filepicker.getFile(filepicker.MIMETYPES.TEXT,function(url, token, data) {
+    	  $.markdownEditor.filepicker.target = data;
+          $('title').prepend($.markdownEditor.filepicker.target.name + " ");
+          $('#filename').html($.markdownEditor.filepicker.target.name);
   		  $.ajax({ url: url,
   		          success: function(data){
   		            $("#editor").html(data);
   		            preview();
   		          }});
   		});
+    });
+    $(".me-savemd").click(function(){
+        var dataUrl = filepicker_utilities.getUrlFromData($("#editor").val());
+        filepicker.saveAs(dataUrl, 'md', function(dataUrl, dataToken, data) {console.log("save md as " + dataUrl + " " + dataToken + " " + data);});
   	});
-	}
-	$.markdownEditor.saveback.save = function(){
+    $(".me-savehtml").click(function(){
+        var dataUrl = filepicker_utilities.getUrlFromData($("#preview").html());
+  		filepicker.saveAs(dataUrl, 'html', function(dataUrl, dataToken, data) {console.log("save html as " + dataUrl + " " + dataToken + " " + data);});
+  	});
+    }
+	$.markdownEditor.filepicker.save = function(){
     
       $('#stat').html(linecount() + " Pages " + wordcount() + " Words " + charcount() + " Characters");
 	  
-      if (!$.markdownEditor.saveback.target){
+      if (!$.markdownEditor.filepicker.target){
 	    return;
 	  } else {
-	    saveback.saveData($("#editor").val(), function(){console.log("saved");});
+        var dataUrl = filepicker_utilities.getUrlFromData($("#editor").val());
+	    filepicker.save(dataUrl, function(){console.log("saved");});
 	  }
 	}
   $.markdownEditor.ui.adjust = function(){
