@@ -1,6 +1,6 @@
 (function ($) {
   //filepicker
-	filepicker.setKey('asdlkfjs');
+	filepicker.setKey('WxSUJFH7TAu3XfyNck38');
 	
 	function h(q) {
 		return function(c) {c.prependToLeadingLine((new Array(q+1)).join('#')+' ');};
