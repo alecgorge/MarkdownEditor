@@ -146,22 +146,24 @@
   		            preview();
   		          }});
   		});
-    });
-    $(".me-savemd").click(function(){
-        var dataUrl = filepicker.getUrlFromData($("#editor").val());
-        filepicker.saveAs(dataUrl, 'text/plain', function(dataUrl) {console.log("save md as " + dataUrl + " " + dataToken + " " + data);});
-  	});
-    $(".me-savehtml").click(function(){
-        var dataUrl = filepicker.getUrlFromData($("#preview").html());
-  		filepicker.saveAs(dataUrl, 'text/html', function(dataUrl) {console.log("save html as " + dataUrl + " " + dataToken + " " + data);});
-  	});
-    }
+      });
+      $(".me-savemd").click(function(){
+        filepicker.getUrlFromData($("#editor").val(), function(dataUrl){
+            filepicker.saveAs(dataUrl, 'text/plain', {'modal': true}, function(dataUrl) {console.log("save md as " + dataUrl);});
+           });
+  	  });
+      $(".me-savehtml").click(function(){
+        filepicker.getUrlFromData($("#preview").html(), function (dataUrl){
+            filepicker.saveAs(dataUrl, 'text/html', {'modal': true}, function(dataUrl) {console.log("save html as " + dataUrl);});
+        });
+  	  });
+    };
 	$.markdownEditor.filepicker.update = function(){
       $('#stat').html(linecount() + " Pages " + wordcount() + " Words " + charcount() + " Characters");
-	}
+	};
   $.markdownEditor.ui.adjust = function(){
 	  $('#editor').height($(window).height()-160);
-	}
+	};
 	jQuery.event.add(window, "load", $.markdownEditor.ui.adjust);
   jQuery.event.add(window, "resize", $.markdownEditor.ui.adjust);
 })(jQuery);
