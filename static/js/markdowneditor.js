@@ -1,6 +1,6 @@
 (function ($) {
   //filepicker
-	filepicker.setKey('WxSUJFH7TAu3XfyNck38');
+	filepicker.setKey('SET_FILEPICKER_API_KEY_HERE');
 	
 	function h(q) {
 		return function(c) {c.prependToLeadingLine((new Array(q+1)).join('#')+' ');};
@@ -58,7 +58,7 @@
 
 			$this.preview = function () {
 				$preview.html(markdown.toHTML($this.val()));
-				$.markdownEditor.filepicker.save();
+				$.markdownEditor.filepicker.update();
 			}; $this.preview();
 
       preview = $this.preview;
@@ -136,7 +136,7 @@
 	$.markdownEditor.filepicker.target = null;
 	$.markdownEditor.filepicker.clickHandlers = function(){
 	  $(".me-open").click(function(){
-  		filepicker.getFile(filepicker.MIMETYPES.TEXT,function(url, token, data) {
+  		filepicker.getFile(filepicker.MIMETYPES.TEXT,function(url, data) {
     	  $.markdownEditor.filepicker.target = data;
           $('title').prepend($.markdownEditor.filepicker.target.name + " ");
           $('#filename').html($.markdownEditor.filepicker.target.name);
@@ -148,24 +148,16 @@
   		});
     });
     $(".me-savemd").click(function(){
-        var dataUrl = filepicker_utilities.getUrlFromData($("#editor").val());
-        filepicker.saveAs(dataUrl, 'md', function(dataUrl, dataToken, data) {console.log("save md as " + dataUrl + " " + dataToken + " " + data);});
+        var dataUrl = filepicker.getUrlFromData($("#editor").val());
+        filepicker.saveAs(dataUrl, 'text/plain', function(dataUrl) {console.log("save md as " + dataUrl + " " + dataToken + " " + data);});
   	});
     $(".me-savehtml").click(function(){
-        var dataUrl = filepicker_utilities.getUrlFromData($("#preview").html());
-  		filepicker.saveAs(dataUrl, 'html', function(dataUrl, dataToken, data) {console.log("save html as " + dataUrl + " " + dataToken + " " + data);});
+        var dataUrl = filepicker.getUrlFromData($("#preview").html());
+  		filepicker.saveAs(dataUrl, 'text/html', function(dataUrl) {console.log("save html as " + dataUrl + " " + dataToken + " " + data);});
   	});
     }
-	$.markdownEditor.filepicker.save = function(){
-    
+	$.markdownEditor.filepicker.update = function(){
       $('#stat').html(linecount() + " Pages " + wordcount() + " Words " + charcount() + " Characters");
-	  
-      if (!$.markdownEditor.filepicker.target){
-	    return;
-	  } else {
-        var dataUrl = filepicker_utilities.getUrlFromData($("#editor").val());
-	    filepicker.save(dataUrl, function(){console.log("saved");});
-	  }
 	}
   $.markdownEditor.ui.adjust = function(){
 	  $('#editor').height($(window).height()-160);
