@@ -1,0 +1,56 @@
+
+.btn-toolbar {
+  overflow: hidden;
+  height: 28px;
+}
+
+#editor {
+  width: 95%;
+  margin-bottom: 0;
+}
+
+#preview {
+    padding-top: 10px;
+}
+
+#branding {
+height: 54px;
+}
+
+body {
+    margin-top: 10px;
+    padding-bottom: 40px;
+}
+
+@media (min-width: 768px) {
+  
+  #source {
+    padding-top: 50px;
+    position: fixed;
+  }
+  #branding {
+    position: fixed;
+  }
+  
+  #preview {
+      padding-top: 100px;
+      float: right;
+  }
+  
+}
+
+@media print {
+
+    .btn-toolbar, #editor, #branding {
+        display: none;
+        }
+        
+    a:link, a:visited {
+        color: #520;
+        background: transparent;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+}
+   
