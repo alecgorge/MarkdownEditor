@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>MarkdownEditor</title>
+		<link type="text/css" rel="stylesheet" href="static/css/bootstrap.css" />
+		<link type="text/css" rel="stylesheet" href="static/css/bootstrap-responsive.css" />
+		<link type="text/css" rel="stylesheet" href="static/css/style.css" />
+	</head>
+	<body>
+  		<div class="container-fluid">
+            <div class="row-fluid">
+    		<h1 id="branding">MarkPad <small>A simple editor for complex ideas</small>
+            </h1>
+      </div>
+  		<div class="row-fluid">
+  		  <div id="source" class="span6">
+      		<div id="toolbar"></div>
+      		<textarea rows="20" cols="80" id="editor"># What is this?
+
+This is a text editor. 
+
+You can edit text files from:
+
+- Dropbox
+- Your Computer
+- A Web Url
+
+and we'll automatically save it back to Dropbox if we can.
+
+## What is Markdown?
+
+Markdown is a way of writing text that can be translated into fully formatted documents, like the preview on the right. 
+
+Text on the left, pretty formatting on the right.
+
+It can be simple like **Bold** or *Italics*, lists like above, headings, or even links, like this one to [Markdown Syntax](http://daringfireball.net/projects/markdown/basics).
+
+*****</textarea>
+        </div>
+        <div id="preview" class="span6">
+  		    <h2>Preview:</h2>
+      		<div id="preview"></div>
+      	</div>
+      </div>
+    </div>
+
+        
+        
+        
+    <div class="navbar navbar-fixed-bottom">
+  <div class="navbar-inner">
+  		<div class="container-fluid">
+        <div id="filename" class="span6">New File (Unsaved)</div>
+        <div class="span6">Statistics
+        <span id="stat" style="padding-left:20px"></span>
+        </div>
+        </div>
+  </div>
+</div>    
+
+		<script type="text/javascript" src="static/js/showdown.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+		<script type="text/javascript" src="static/js/jquery.ba-resize.js"></script>
+		<script type="text/javascript" src="static/js/jquery.caret.1.02.js"></script>
+		<script type="text/javascript" src="static/js/bootstrap.js"></script>
+        <script type="text/javascript" src="http://api.filepicker.io/v0/filepicker.js"></script>
+		<script type="text/javascript" src="static/js/markdowneditor.js"></script>
+		<script type="text/javascript">
+			$(function () {
+				$('#editor').markdownEditor({
+					toolbarLoc: $('#toolbar'),
+					toolbar: 'default',
+					preview: $('#preview')
+				});
+				
+				$("#editor").resize( function() {
+                console.log('resize');
+                var windowsize = $(window).width();
+                var newsize = windowsize - $("#editor").width() - 80;
+                if (windowsize < 768){
+                  $('#preview').show();
+                  $('#preview').width(windowsize);
+                } else {
+                  if (newsize > 150){
+                    $('#preview').width(newsize);
+                    $('#preview').show();
+                  } else {
+                    $('#preview').hide();
+                  }
+                }
+            });
+			});
+		</script>
+		
+	</body>
+</html>
